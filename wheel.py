@@ -19,7 +19,7 @@ class Wheel:
         self.pwmpin2 = PWM(self.timer2, freq=50, duty=0, pin=self.pin2)
 
     # 前进（档位 1-6档）
-    def gear(self, level):
+    def forward(self, level):
         #self.pwmpin1.enable() #启用pin1
         #self.pwmpin2.enable() #不用pin2
 
@@ -38,6 +38,14 @@ class Wheel:
 
         self.pwmpin1.duty(0)
         self.pwmpin2.duty(20) #慢速倒车
+
+    # 后退
+    def back(self, level):
+        #self.pwmpin1.disable() #启用pin1
+        #self.pwmpin2.enable() #不用pin2
+
+        self.pwmpin1.duty(0)
+        self.pwmpin2.duty(20 * level) #慢速倒车
 
     # 停车
     def stop(self):
@@ -70,34 +78,34 @@ class Wheel:
     #RIGHT_FORWARD = Wheel(11, 12, TIMER1, CHANNEL0, TIMER1, CHANNEL1) # 左前轮
     #RIGHT_BACK = Wheel(13, 14, TIMER1, CHANNEL2, TIMER1, CHANNEL3) # 左前轮
 
-    #LEFT_FORWARD.gear(1)
+    #LEFT_FORWARD.forward(1)
     #utime.sleep_ms(500)
-    #LEFT_FORWARD.gear(2)
+    #LEFT_FORWARD.forward(2)
     #utime.sleep_ms(500)
-    #LEFT_FORWARD.gear(3)
+    #LEFT_FORWARD.forward(3)
     #utime.sleep_ms(500)
-    #LEFT_FORWARD.gear(4)
+    #LEFT_FORWARD.forward(4)
     #utime.sleep_ms(500)
-    #LEFT_FORWARD.gear(5)
+    #LEFT_FORWARD.forward(5)
     #utime.sleep_ms(500)
-    #LEFT_FORWARD.gear(6)
+    #LEFT_FORWARD.forward(6)
     #utime.sleep_ms(500)
     #LEFT_FORWARD.break_car()
     #utime.sleep_ms(500)
     #LEFT_FORWARD.stop()
     #utime.sleep_ms(500)
 
-    #LEFT_BACK.gear(1)
+    #LEFT_BACK.forward(1)
     #utime.sleep_ms(500)
     #LEFT_BACK.stop()
     #utime.sleep_ms(500)
 
-    #RIGHT_FORWARD.gear(1)
+    #RIGHT_FORWARD.forward(1)
     #utime.sleep_ms(500)
     #RIGHT_FORWARD.stop()
     #utime.sleep_ms(500)
 
-    #RIGHT_BACK.gear(1)
+    #RIGHT_BACK.forward(1)
     #utime.sleep_ms(500)
     #RIGHT_BACK.stop()
     #utime.sleep_ms(500)
