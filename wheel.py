@@ -15,8 +15,8 @@ class Wheel:
 
         self.timer1 = Timer(timers[timer_num1], channels[channel_num1], mode=Timer.MODE_PWM)
         self.timer2 = Timer(timers[timer_num2], channels[channel_num2], mode=Timer.MODE_PWM)
-        self.pwmpin1 = PWM(self.timer1, freq=50, duty=0, pin=self.pin1)
-        self.pwmpin2 = PWM(self.timer2, freq=50, duty=0, pin=self.pin2)
+        self.pwmpin1 = PWM(self.timer1, freq=5000, duty=0, pin=self.pin1)
+        self.pwmpin2 = PWM(self.timer2, freq=5000, duty=0, pin=self.pin2)
 
         self.unit_duty = 10
 
