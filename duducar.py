@@ -36,47 +36,53 @@ class DuduCar:
         self.SERVO_PIN = 9 #舵机信号
         self.servo = Servo(self.TIMER2, self.CHANNEL1, self.SERVO_PIN)
 
-    def forward(self, time_ms):
+    def forward(self):
         self.left_front.forward(self.DEFAULT_FORWARD_LEVEL)
         self.left_back.forward(self.DEFAULT_FORWARD_LEVEL)
         self.right_front.forward(self.DEFAULT_FORWARD_LEVEL)
         self.right_back.forward(self.DEFAULT_FORWARD_LEVEL)
-        #utime.sleep_ms(time_ms)
 
-    def back(self, time_ms):
+    def back(self):
         left_front.back(self.DEFAULT_BACKWARD_LEVEL)
         left_back.back(self.DEFAULT_BACKWARD_LEVEL)
         right_front.back(self.DEFAULT_BACKWARD_LEVEL)
         right_back.back(self.DEFAULT_BACKWARD_LEVEL)
-        #utime.sleep_ms(time_ms)
 
-    def right(self, time_ms):
+    def right(self):
         self.left_front.forward(self.DEFAULT_LEVEL)
         self.left_back.back(self.DEFAULT_LEVEL)
         self.right_front.back(self.DEFAULT_LEVEL)
         self.right_back.forward(self.DEFAULT_LEVEL)
-        #utime.sleep_ms(time_ms)
 
-    def left(self, time_ms):
+    def left(self):
         self.left_front.back(self.DEFAULT_LEVEL)
         self.left_back.forward(self.DEFAULT_LEVEL)
         self.right_front.forward(self.DEFAULT_LEVEL)
         self.right_back.back(self.DEFAULT_LEVEL)
-        #utime.sleep_ms(time_ms)
+
+    def front_left(self):
+        self.left_front.stop()
+        self.left_back.forward(self.DEFAULT_LEVEL)
+        self.right_front.forward(self.DEFAULT_LEVEL)
+        self.right_back.back(self.DEFAULT_LEVEL)
+
+    def front_right(self):
+        self.left_front.forward(self.DEFAULT_LEVEL)
+        self.left_back.forward(self.DEFAULT_LEVEL)
+        self.right_front.stop()
+        self.right_back.back(self.DEFAULT_LEVEL)
 
     def breakcar(self):
         self.left_front.break_car()
         self.left_back.break_car()
         self.right_front.break_car()
         self.right_back.break_car()
-        #utime.sleep_ms(500)
 
     def stop(self):
         self.left_front.stop()
         self.left_back.stop()
         self.right_front.stop()
         self.right_back.stop()
-        #utime.sleep_ms(1000)
 
     def obstacle_distance(self):
         # 探测N次，取最大长度
@@ -94,6 +100,9 @@ class DuduCar:
                 most_long_one = item
         #
         return most_long_one
+
+    def radar_init(self):
+        self.servo.rotate(0)
 
     # 雷达扫描，获取最佳前进角度
     # return 最佳前进角度
@@ -141,8 +150,26 @@ class DuduCar:
 
 if __name__ == '__main__':
     duduCar = DuduCar()
-    duduCar.radar_scan()
-    #print('obstacle distance ', duduCar.obstacle_distance())
+    #duduCar.radar_scan()
+
+    for i in range(10):
+        if duduCar.obstacle_distance() < 300:
+            # 停车观察
+            duduCar.stop()
+            optimal_angle = duduCar.radar_scan()
+            if optimal_angle < 0:
+                # 左拐
+                duduCar.front_left()
+                print('left')
+            elif optimal_angle > 0:
+                # 右拐
+                duduCar.front_right()
+                rint('right')
+        else:
+            duduCar.forward()
+            print('forward')
+
+        utime.sleep_ms(1000)
 
 
 

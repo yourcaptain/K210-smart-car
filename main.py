@@ -2,27 +2,28 @@ import utime
 from duducar import DuduCar
 
 duduCar = DuduCar()
-# duduCar.radar_scan()
-print('obstacle distance ', duduCar.obstacle_distance())
+duduCar.radar_init()
 
-for i in range(1000):
-    duduCar.forward(2000)
+for i in range(2):
     if duduCar.obstacle_distance() < 300:
         # 停车观察
         duduCar.stop()
         optimal_angle = duduCar.radar_scan()
         if optimal_angle < 0:
             # 左拐
-        else if optimal_angle > 0:
+            duduCar.front_left()
+            print('left')
+        elif optimal_angle > 0:
             # 右拐
-    # sleep 1秒
+            duduCar.front_right()
+            print('right')
+    else:
+        duduCar.forward()
+        print('forward')
 
-breakcar()
-back(2000)
-breakcar()
-right(3000)
-breakcar()
-left(3000)
-stop()
+    utime.sleep_ms(1000)
+
+duduCar.radar_init()
+duduCar.stop()
 
 print('FINISH')
