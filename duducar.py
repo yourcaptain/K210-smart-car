@@ -14,19 +14,20 @@ class DuduCar:
         self.CHANNEL2 = 2
         self.CHANNEL3 = 3
 
-        self.LEVEL1 = 1
-        self.LEVEL2 = 2
-        self.LEVEL3 = 3
-        self.LEVEL4 = 4
-        self.LEVEL5 = 5
-        self.DEFAULT_LEVEL = self.LEVEL2
-        self.DEFAULT_FORWARD_LEVEL = self.LEVEL2
+        self.LEVEL1 = 2
+        self.LEVEL2 = 3
+        self.LEVEL3 = 4
+        self.LEVEL4 = 5
+        self.LEVEL5 = 6
+        self.DEFAULT_LEVEL = self.LEVEL1
+        self.DEFAULT_FORWARD_LEVEL = self.LEVEL1
         self.DEFAULT_BACKWARD_LEVEL = self.LEVEL1
 
         self.left_front = Wheel(19, 20, self.TIMER0, self.CHANNEL0, self.TIMER0, self.CHANNEL1) # 左前轮
-        self.left_back = Wheel(15, 17, self.TIMER0, self.CHANNEL2, self.TIMER0, self.CHANNEL3) # 左后轮
+
         self.right_front = Wheel(33, 34, self.TIMER1, self.CHANNEL0, self.TIMER1, self.CHANNEL1) # 前右轮
-        self.right_back = Wheel(35, 30, self.TIMER1, self.CHANNEL2, self.TIMER1, self.CHANNEL3) # 后右轮
+        self.right_back = Wheel(35, 30, self.TIMER2, self.CHANNEL2, self.TIMER2, self.CHANNEL3) # 后右轮
+        self.left_back = Wheel(15, 17, self.TIMER0, self.CHANNEL2, self.TIMER0, self.CHANNEL3) # 左后轮
 
 
         self.TRIG_PIN = 27 # 超声波trig
@@ -38,16 +39,15 @@ class DuduCar:
 
     def forward(self):
         self.left_front.forward(self.DEFAULT_FORWARD_LEVEL)
-        self.right_front.forward(self.DEFAULT_FORWARD_LEVEL)
-        self.right_back.forward(self.DEFAULT_FORWARD_LEVEL)
         self.left_back.forward(self.DEFAULT_FORWARD_LEVEL)
-
+        self.right_front.forward(self.DEFAULT_FORWARD_LEVEL*1.2)
+        self.right_back.forward(self.DEFAULT_FORWARD_LEVEL*1.2)
 
     def back(self):
         left_front.back(self.DEFAULT_BACKWARD_LEVEL)
-        right_back.back(self.DEFAULT_BACKWARD_LEVEL)
         left_back.back(self.DEFAULT_BACKWARD_LEVEL)
-        right_front.back(self.DEFAULT_BACKWARD_LEVEL)
+        right_back.back(self.DEFAULT_BACKWARD_LEVEL*1.2)
+        right_front.back(self.DEFAULT_BACKWARD_LEVEL*1.2)
 
     def right(self):
         self.right_front.back(self.DEFAULT_LEVEL)
@@ -63,15 +63,15 @@ class DuduCar:
 
     def front_left(self):
         self.left_front.stop()
-        self.left_back.forward(self.DEFAULT_LEVEL)
-        self.right_front.forward(self.DEFAULT_LEVEL)
-        self.right_back.forward(self.DEFAULT_LEVEL)
+        self.left_back.forward(self.DEFAULT_FORWARD_LEVEL)
+        self.right_front.forward(self.DEFAULT_FORWARD_LEVEL)
+        self.right_back.forward(self.DEFAULT_FORWARD_LEVEL)
 
     def front_right(self):
         self.right_front.stop()
-        self.left_front.forward(self.DEFAULT_LEVEL)
-        self.left_back.forward(self.DEFAULT_LEVEL)
-        self.right_back.forward(self.DEFAULT_LEVEL)
+        self.left_front.forward(self.DEFAULT_FORWARD_LEVEL)
+        self.left_back.forward(self.DEFAULT_FORWARD_LEVEL)
+        self.right_back.forward(self.DEFAULT_FORWARD_LEVEL)
 
     def breakcar(self):
         self.left_front.break_car()
@@ -151,7 +151,11 @@ class DuduCar:
 
 if __name__ == '__main__':
     duduCar = DuduCar()
-    duduCar.radar_scan()
+    #duduCar.radar_scan()
+
+    duduCar.forward()
+    utime.sleep(10)
+    duduCar.stop()
 
     #for i in range(2):
         #if duduCar.obstacle_distance() < 300:

@@ -20,7 +20,7 @@ while True:
             obstacle_distance = duduCar.obstacle_distance()
             lcd.draw_string(10, 60, "obstical distance: " + str(obstacle_distance) + "mm", lcd.BLACK, lcd.WHITE)
 
-            if obstacle_distance < 300:
+            if obstacle_distance < 500:
                 # 停车观察
                 duduCar.stop()
                 optimal_angle = duduCar.radar_scan()
@@ -29,10 +29,12 @@ while True:
                     # 左拐
                     duduCar.front_left()
                     lcd.draw_string(10, 200, "front left", lcd.BLACK, lcd.WHITE)
+                    utime.sleep_ms(1000)
                 elif optimal_angle > 0:
                     # 右拐
                     duduCar.front_right()
                     lcd.draw_string(10, 200, "front right", lcd.BLACK, lcd.WHITE)
+                    utime.sleep_ms(1000)
                 else:
                     duduCar.forward()
                     lcd.draw_string(10, 200, "forward", lcd.BLACK, lcd.WHITE)
