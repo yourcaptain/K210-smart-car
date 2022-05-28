@@ -19,7 +19,7 @@ class DuduCar:
         self.LEVEL3 = 3
         self.LEVEL4 = 4
         self.LEVEL5 = 5
-        self.DEFAULT_LEVEL = self.LEVEL1
+        self.DEFAULT_LEVEL = self.LEVEL2
         self.DEFAULT_FORWARD_LEVEL = self.LEVEL2
         self.DEFAULT_BACKWARD_LEVEL = self.LEVEL1
 
@@ -29,29 +29,30 @@ class DuduCar:
         self.right_back = Wheel(35, 30, self.TIMER1, self.CHANNEL2, self.TIMER1, self.CHANNEL3) # 后右轮
 
 
-        self.TRIG_PIN = 7 # 超声波trig
-        self.ECHO_PIN = 6 # 超声波echo
-        self.supersonic = SuperSonicDistance(self.TRIG_PIN, self.ECHO_PIN, self.TIMER2, self.CHANNEL0)
+        self.TRIG_PIN = 27 # 超声波trig
+        self.ECHO_PIN = 29 # 超声波echo
+        self.supersonic = SuperSonicDistance(self.TRIG_PIN, self.ECHO_PIN)
 
         self.SERVO_PIN = 9 #舵机信号
         self.servo = Servo(self.TIMER2, self.CHANNEL1, self.SERVO_PIN)
 
     def forward(self):
         self.left_front.forward(self.DEFAULT_FORWARD_LEVEL)
-        self.left_back.forward(self.DEFAULT_FORWARD_LEVEL)
         self.right_front.forward(self.DEFAULT_FORWARD_LEVEL)
         self.right_back.forward(self.DEFAULT_FORWARD_LEVEL)
+        self.left_back.forward(self.DEFAULT_FORWARD_LEVEL)
+
 
     def back(self):
         left_front.back(self.DEFAULT_BACKWARD_LEVEL)
+        right_back.back(self.DEFAULT_BACKWARD_LEVEL)
         left_back.back(self.DEFAULT_BACKWARD_LEVEL)
         right_front.back(self.DEFAULT_BACKWARD_LEVEL)
-        right_back.back(self.DEFAULT_BACKWARD_LEVEL)
 
     def right(self):
+        self.right_front.back(self.DEFAULT_LEVEL)
         self.left_front.forward(self.DEFAULT_LEVEL)
         self.left_back.back(self.DEFAULT_LEVEL)
-        self.right_front.back(self.DEFAULT_LEVEL)
         self.right_back.forward(self.DEFAULT_LEVEL)
 
     def left(self):
@@ -64,13 +65,13 @@ class DuduCar:
         self.left_front.stop()
         self.left_back.forward(self.DEFAULT_LEVEL)
         self.right_front.forward(self.DEFAULT_LEVEL)
-        self.right_back.back(self.DEFAULT_LEVEL)
+        self.right_back.forward(self.DEFAULT_LEVEL)
 
     def front_right(self):
+        self.right_front.stop()
         self.left_front.forward(self.DEFAULT_LEVEL)
         self.left_back.forward(self.DEFAULT_LEVEL)
-        self.right_front.stop()
-        self.right_back.back(self.DEFAULT_LEVEL)
+        self.right_back.forward(self.DEFAULT_LEVEL)
 
     def breakcar(self):
         self.left_front.break_car()
@@ -150,26 +151,26 @@ class DuduCar:
 
 if __name__ == '__main__':
     duduCar = DuduCar()
-    #duduCar.radar_scan()
+    duduCar.radar_scan()
 
-    for i in range(10):
-        if duduCar.obstacle_distance() < 300:
-            # 停车观察
-            duduCar.stop()
-            optimal_angle = duduCar.radar_scan()
-            if optimal_angle < 0:
-                # 左拐
-                duduCar.front_left()
-                print('left')
-            elif optimal_angle > 0:
-                # 右拐
-                duduCar.front_right()
-                rint('right')
-        else:
-            duduCar.forward()
-            print('forward')
+    #for i in range(2):
+        #if duduCar.obstacle_distance() < 300:
+            ## 停车观察
+            #duduCar.stop()
+            #optimal_angle = duduCar.radar_scan()
+            #if optimal_angle < 0:
+                ## 左拐
+                #duduCar.front_left()
+                #print('left')
+            #elif optimal_angle > 0:
+                ## 右拐
+                #duduCar.front_right()
+                #print('right')
+        #else:
+            #duduCar.forward()
+            #print('forward')
 
-        utime.sleep_ms(1000)
+        #utime.sleep_ms(1000)
 
 
 

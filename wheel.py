@@ -18,68 +18,52 @@ class Wheel:
         self.pwmpin1 = PWM(self.timer1, freq=50, duty=0, pin=self.pin1)
         self.pwmpin2 = PWM(self.timer2, freq=50, duty=0, pin=self.pin2)
 
+        self.unit_duty = 10
+
     # 前进（档位 1-6档）
     def forward(self, level):
-        #self.pwmpin1.enable() #启用pin1
-        #self.pwmpin2.enable() #不用pin2
-
-        if level <= 1:
-            level = 1
-        if level >= 5:
-            level = 5
-
-        self.pwmpin1.duty(20 * level)
+        self.pwmpin1.duty(self.unit_duty * level)
         self.pwmpin2.duty(0)
 
     # 慢速后退
     def back(self):
-        #self.pwmpin1.disable() #启用pin1
-        #self.pwmpin2.enable() #不用pin2
-
         self.pwmpin1.duty(0)
-        self.pwmpin2.duty(20) #慢速倒车
+        self.pwmpin2.duty(self.unit_duty) #慢速倒车
 
     # 后退
     def back(self, level):
-        #self.pwmpin1.disable() #启用pin1
-        #self.pwmpin2.enable() #不用pin2
-
         self.pwmpin1.duty(0)
-        self.pwmpin2.duty(20 * level) #慢速倒车
+        self.pwmpin2.duty(self.unit_duty * level) #慢速倒车
 
     # 停车
     def stop(self):
         self.pwmpin1.duty(0)
-        self.pwmpin2.duty(0) #慢速倒车
-        #self.pwmpin1.disable() #先停pin1
-        #self.pwmpin2.disable() #先停pin2
+        self.pwmpin2.duty(0)
 
     # 刹车
     def break_car(self):
-        #self.pwmpin1.enable() #启用pin1
-        #self.pwmpin2.enable() #不用pin2
-
         self.pwmpin1.duty(100)
         self.pwmpin2.duty(100)
 
 # 测试
-#if __name__ == '__main__':
+if __name__ == '__main__':
 
-    #TIMER0 = 0
-    #TIMER1 = 1
-    #TIMER2 = 2
-    #CHANNEL0 = 0
-    #CHANNEL1 = 1
-    #CHANNEL2 = 2
-    #CHANNEL3 = 3
+    TIMER0 = 0
+    TIMER1 = 1
+    TIMER2 = 2
+    CHANNEL0 = 0
+    CHANNEL1 = 1
+    CHANNEL2 = 2
+    CHANNEL3 = 3
 
-    #LEFT_FORWARD = Wheel(19, 20, TIMER0, CHANNEL0, TIMER0, CHANNEL1) # 左前轮
-    #LEFT_BACK = Wheel(15, 17, TIMER0, CHANNEL2, TIMER0, CHANNEL3) # 左前轮
-    #RIGHT_FORWARD = Wheel(11, 12, TIMER1, CHANNEL0, TIMER1, CHANNEL1) # 左前轮
-    #RIGHT_BACK = Wheel(13, 14, TIMER1, CHANNEL2, TIMER1, CHANNEL3) # 左前轮
+    LEFT_FORWARD = Wheel(19, 20, TIMER0, CHANNEL0, TIMER0, CHANNEL1) # 左前轮
+    LEFT_BACK = Wheel(15, 17, TIMER0, CHANNEL2, TIMER0, CHANNEL3) # 左前轮
+    RIGHT_FORWARD = Wheel(33, 34, TIMER1, CHANNEL0, TIMER1, CHANNEL1) # 左前轮
+    RIGHT_BACK = Wheel(35, 30, TIMER1, CHANNEL2, TIMER1, CHANNEL3) # 左前轮
 
-    #LEFT_FORWARD.forward(1)
-    #utime.sleep_ms(500)
+    LEFT_FORWARD.forward(1)
+    utime.sleep_ms(1000)
+    LEFT_FORWARD.stop()
     #LEFT_FORWARD.forward(2)
     #utime.sleep_ms(500)
     #LEFT_FORWARD.forward(3)

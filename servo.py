@@ -29,3 +29,6 @@ if __name__ == '__main__':
 
         servo.rotate(90)
         utime.sleep_ms(1000)
+
+        servo.rotate(90)
+        utime.sleep_ms(1000)
