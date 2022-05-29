@@ -7,6 +7,7 @@ class DuduCar:
 
     def __init__(self, distance_threshold):
         self.SUPER_SONIC_TRIG_WAIT_TIME_MS = 80
+        self.SERVO_ROTATED_DELAY_MS = 250 #给舵机时间转动到位（假设每次探测旋转不超过45度）（按0.22秒/60度计算）
         self.distance_threshold = distance_threshold
 
         self.TIMER0 = 0
@@ -94,23 +95,22 @@ class DuduCar:
 
     def obstacle_distance(self):
         self.servo.rotate(0)
-        # 探测N次，取最大长度
+        # 探测N次，取最小距离（作为障碍物距离）
         distances_in_this_degree = []
         for detection_degree in (-10, 0, 0, 10):
             self.servo.rotate(detection_degree)
+            utime.sleep_ms(self.SERVO_ROTATED_DELAY_MS)
+
             self.supersonic.start()
             utime.sleep_ms(self.SUPER_SONIC_TRIG_WAIT_TIME_MS)
             distance_mm = self.supersonic.get_distance_mm()
             distances_in_this_degree.append(distance_mm)
         #
-        most_long_one = 0
-        for item in distances_in_this_degree:
-            if item > most_long_one:
-                most_long_one = item
+        most_short_one = min(distances_in_this_degree)
         #
         print("distances_in_this_degree:", distances_in_this_degree, " most_long_one: ", most_long_one)
         self.servo.rotate(0)
-        return most_long_one
+        return most_short_one
 
     def radar_init(self):
         self.servo.rotate(0)
@@ -125,6 +125,7 @@ class DuduCar:
         self.servo.rotate(0) #舵机返回0度位置-正前方
         for degree in (-90, -45, 0, 45, 90):
             self.servo.rotate(degree)
+            utime.sleep_ms(self.SERVO_ROTATED_DELAY_MS)
 
             # 每个方向探测2次，取最大长度
             distances_in_this_degree = []
