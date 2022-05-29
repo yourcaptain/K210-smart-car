@@ -48,10 +48,10 @@ class DuduCar:
         self.right_back.forward(self.DEFAULT_FORWARD_LEVEL*1.2)
 
     def back(self):
-        left_front.back(self.DEFAULT_BACKWARD_LEVEL)
-        left_back.back(self.DEFAULT_BACKWARD_LEVEL)
-        right_back.back(self.DEFAULT_BACKWARD_LEVEL*1.2)
-        right_front.back(self.DEFAULT_BACKWARD_LEVEL*1.2)
+        self.left_front.back(self.DEFAULT_BACKWARD_LEVEL)
+        self.left_back.back(self.DEFAULT_BACKWARD_LEVEL)
+        self.right_back.back(self.DEFAULT_BACKWARD_LEVEL*1.2)
+        self.right_front.back(self.DEFAULT_BACKWARD_LEVEL*1.2)
 
     # 右方侧移
     def right(self):
@@ -136,13 +136,7 @@ class DuduCar:
                 print("degree:", degree, " count:", i, " distance is ", distance_mm, "mm")
                 distances_in_this_degree.append(distance_mm)
             #
-            most_long_one = -1
-            for item in distances_in_this_degree:
-                if item > most_long_one:
-                    most_long_one = item
-
-            #
-            scan_results[str(degree)] = most_long_one
+            scan_results[str(degree)] = max(distances_in_this_degree)
 
         self.servo.rotate(0) #舵机返回0度位置-正前方
 
@@ -170,8 +164,8 @@ class DuduCar:
 if __name__ == '__main__':
     OBSTACLE_WARNING_DISTANCE = 500 #毫米
     duduCar = DuduCar(OBSTACLE_WARNING_DISTANCE)
-    #duduCar.radar_scan()
-    duduCar.obstacle_distance()
+    duduCar.radar_scan()
+    #duduCar.obstacle_distance()
 
     #duduCar.forward()
     #utime.sleep(10)
