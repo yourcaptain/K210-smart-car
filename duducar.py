@@ -49,24 +49,28 @@ class DuduCar:
         right_back.back(self.DEFAULT_BACKWARD_LEVEL*1.2)
         right_front.back(self.DEFAULT_BACKWARD_LEVEL*1.2)
 
+    # 右方侧移
     def right(self):
         self.right_front.back(self.DEFAULT_LEVEL)
         self.left_front.forward(self.DEFAULT_LEVEL)
         self.left_back.back(self.DEFAULT_LEVEL)
         self.right_back.forward(self.DEFAULT_LEVEL)
 
+    # 左方侧移
     def left(self):
         self.left_front.back(self.DEFAULT_LEVEL)
         self.left_back.forward(self.DEFAULT_LEVEL)
         self.right_front.forward(self.DEFAULT_LEVEL)
         self.right_back.back(self.DEFAULT_LEVEL)
 
+    # 左前方拐弯
     def front_left(self):
         self.left_front.stop()
         self.left_back.forward(self.DEFAULT_FORWARD_LEVEL)
         self.right_front.forward(self.DEFAULT_FORWARD_LEVEL)
         self.right_back.forward(self.DEFAULT_FORWARD_LEVEL)
 
+    # 右前方拐弯
     def front_right(self):
         self.right_front.stop()
         self.left_front.forward(self.DEFAULT_FORWARD_LEVEL)

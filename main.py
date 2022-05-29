@@ -15,7 +15,7 @@ while True:
     if KEY.value()==0: #按键被按下
         lcd.clear(lcd.WHITE) #清屏白色
         lcd.draw_string(10, 20, "start " , lcd.BLACK, lcd.WHITE)
-        for i in range(10):
+        for i in range(100):
             lcd.draw_string(10, 40, "index:"+str(i) , lcd.BLACK, lcd.WHITE)
             obstacle_distance = duduCar.obstacle_distance()
             lcd.draw_string(10, 60, "obstical distance: " + str(obstacle_distance) + "mm", lcd.BLACK, lcd.WHITE)
