@@ -88,7 +88,7 @@ class DuduCar:
     def obstacle_distance(self):
         # 探测N次，取最大长度
         distances_in_this_degree = []
-        for i in (0, 1, 3):
+        for i in (0, 1):
             self.supersonic.start()
             utime.sleep_ms(50)
             distance_mm = self.supersonic.get_distance_mm()
@@ -119,7 +119,7 @@ class DuduCar:
             distances_in_this_degree = []
             for i in (0, 1):
                 self.supersonic.start()
-                utime.sleep_ms(500)
+                utime.sleep_ms(50)
                 distance_mm = self.supersonic.get_distance_mm()
                 print("degree:", degree, " count:", i, " distance is ", distance_mm, "mm")
                 distances_in_this_degree.append(distance_mm)

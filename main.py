@@ -29,19 +29,19 @@ while True:
                     # 左拐
                     duduCar.front_left()
                     lcd.draw_string(10, 200, "front left", lcd.BLACK, lcd.WHITE)
-                    utime.sleep_ms(1000)
+                    utime.sleep_ms(3000)#花3秒时间拐弯
                 elif optimal_angle > 0:
                     # 右拐
                     duduCar.front_right()
                     lcd.draw_string(10, 200, "front right", lcd.BLACK, lcd.WHITE)
-                    utime.sleep_ms(1000)
+                    utime.sleep_ms(3000)#花3秒时间拐弯
                 else:
                     duduCar.forward()
                     lcd.draw_string(10, 200, "forward", lcd.BLACK, lcd.WHITE)
             else:
                 duduCar.forward()
                 lcd.draw_string(10, 200, "forward", lcd.BLACK, lcd.WHITE)
-            utime.sleep_ms(1000)
+                utime.sleep_ms(100)#直行-持续运行100毫秒（期间无需探测障碍物距离）
     else:
         lcd.clear(lcd.WHITE) #清屏白色
         lcd.draw_string(110, 120, "PRESS KEY TO START", lcd.RED, lcd.WHITE)
