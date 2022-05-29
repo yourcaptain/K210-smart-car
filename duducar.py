@@ -108,7 +108,7 @@ class DuduCar:
         #
         most_short_one = min(distances_in_this_degree)
         #
-        print("distances_in_this_degree:", distances_in_this_degree, " most_long_one: ", most_long_one)
+        print("distances_in_this_degree:", distances_in_this_degree, " most_short_one: ", most_short_one)
         self.servo.rotate(0)
         return most_short_one
 
