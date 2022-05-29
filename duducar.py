@@ -5,7 +5,10 @@ from servo import Servo
 
 class DuduCar:
 
-    def __init__(self):
+    def __init__(self, distance_threshold):
+        self.SUPER_SONIC_TRIG_WAIT_TIME_MS = 80
+        self.distance_threshold = distance_threshold
+
         self.TIMER0 = 0
         self.TIMER1 = 1
         self.TIMER2 = 2
@@ -90,13 +93,14 @@ class DuduCar:
         self.right_back.stop()
 
     def obstacle_distance(self):
+        self.servo.rotate(0)
         # 探测N次，取最大长度
         distances_in_this_degree = []
-        for i in (0, 1):
+        for detection_degree in (-10, 0, 0, 10):
+            self.servo.rotate(detection_degree)
             self.supersonic.start()
-            utime.sleep_ms(50)
+            utime.sleep_ms(self.SUPER_SONIC_TRIG_WAIT_TIME_MS)
             distance_mm = self.supersonic.get_distance_mm()
-            print(" count:", i, " distance is ", distance_mm, "mm")
             distances_in_this_degree.append(distance_mm)
         #
         most_long_one = 0
@@ -104,6 +108,8 @@ class DuduCar:
             if item > most_long_one:
                 most_long_one = item
         #
+        print("distances_in_this_degree:", distances_in_this_degree, " most_long_one: ", most_long_one)
+        self.servo.rotate(0)
         return most_long_one
 
     def radar_init(self):
@@ -116,6 +122,7 @@ class DuduCar:
         scan_results = {'-90': 0, '-45': 0, '0': 0, '45': 0, '90': 0}
 
         #分别扫描5个方向
+        self.servo.rotate(0) #舵机返回0度位置-正前方
         for degree in (-90, -45, 0, 45, 90):
             self.servo.rotate(degree)
 
@@ -123,12 +130,12 @@ class DuduCar:
             distances_in_this_degree = []
             for i in (0, 1):
                 self.supersonic.start()
-                utime.sleep_ms(50)
+                utime.sleep_ms(self.SUPER_SONIC_TRIG_WAIT_TIME_MS)
                 distance_mm = self.supersonic.get_distance_mm()
                 print("degree:", degree, " count:", i, " distance is ", distance_mm, "mm")
                 distances_in_this_degree.append(distance_mm)
             #
-            most_long_one = 0
+            most_long_one = -1
             for item in distances_in_this_degree:
                 if item > most_long_one:
                     most_long_one = item
@@ -136,30 +143,38 @@ class DuduCar:
             #
             scan_results[str(degree)] = most_long_one
 
-        # 取距离最长的方向
-        the_most_long_distance = 0
-        the_most_long_distance_degree = -1
-        for degree in scan_results:
-            distance = scan_results[degree]
-            if distance > the_most_long_distance:
-                the_most_long_distance = distance
-                the_most_long_distance_degree = int(degree)
-
         self.servo.rotate(0) #舵机返回0度位置-正前方
 
+        # 取距离最长的方向。先过滤距离超过{self.distance_threshold}的方向，并取其最大值所在方向作为最终目标方向
+        # 分三个方向。左（-90， -45）；前（0度）；右（45， 90）
+        print('scan_results', scan_results)
+        filtered_scan_results = {'left':0, 'forward':0, 'right':0}
+        filtered_scan_results['left'] = max(scan_results['-90'], scan_results['-45'])
+        filtered_scan_results['forward'] = scan_results['0']
+        filtered_scan_results['right'] = max(scan_results['45'], scan_results['90'])
+        print('filtered_scan_results', filtered_scan_results)
+
+        the_most_long_distance = 0
+        the_most_long_distance_direction = 'unknown'
+        for direction in filtered_scan_results:
+            distance = filtered_scan_results[direction]
+            if distance > the_most_long_distance:
+                the_most_long_distance = distance
+                the_most_long_distance_direction = direction
+        print("the_most_long_distance_direction:", the_most_long_distance_direction)
+
         # 返回距离最长的方向的角度
-        print("DEGREE OF THE MOST LONG DISTANCE IS ", the_most_long_distance_degree, " ", the_most_long_distance , 'mm')
-        return the_most_long_distance_degree
-
-
+        return the_most_long_distance_direction
 
 if __name__ == '__main__':
-    duduCar = DuduCar()
+    OBSTACLE_WARNING_DISTANCE = 500 #毫米
+    duduCar = DuduCar(OBSTACLE_WARNING_DISTANCE)
     #duduCar.radar_scan()
+    duduCar.obstacle_distance()
 
-    duduCar.forward()
-    utime.sleep(10)
-    duduCar.stop()
+    #duduCar.forward()
+    #utime.sleep(10)
+    #duduCar.stop()
 
     #for i in range(2):
         #if duduCar.obstacle_distance() < 300:
